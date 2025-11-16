@@ -68,24 +68,26 @@
     });
   }
 
-  function includeNavbarAndInit() {
-    var host = qs('[data-include]');
-    if (!host) {
+  function includePartialsAndInit() {
+    var hosts = qsa('[data-include]');
+    if (!hosts.length) {
       initNav(); initFAQ(); initSmooth();
       return;
     }
-    var src = host.getAttribute('data-include');
-    if (!src) { initNav(); initFAQ(); initSmooth(); return; }
-    fetch(src, { cache: 'no-cache' })
-      .then(function (r) { return r.text(); })
-      .then(function (html) { host.innerHTML = html; })
-      .catch(function () { /* ignore */ })
-      .finally(function () {
-        initNav(); initFAQ(); initSmooth();
-      });
+    var tasks = hosts.map(function (host) {
+      var src = host.getAttribute('data-include');
+      if (!src) return Promise.resolve();
+      return fetch(src, { cache: 'no-cache' })
+        .then(function (r) { return r.text(); })
+        .then(function (html) { host.innerHTML = html; })
+        .catch(function () { /* ignore */ });
+    });
+    Promise.all(tasks).then(function () {
+      initNav(); initFAQ(); initSmooth();
+    });
   }
 
-  includeNavbarAndInit();
+  includePartialsAndInit();
 })();
 
 
