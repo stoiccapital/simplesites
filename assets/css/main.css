@@ -215,7 +215,17 @@ p {
 .hero .lead { max-width: 52ch; }
 .hero-media { display: none; }
 @media (min-width: 900px) {
-  .hero-media { display: block; }
+  .hero-media { 
+    display: block; 
+    align-self: center;
+  }
+  .hero-media img {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
 }
 .hero--simple { padding-top: var(--sp-10); }
 
